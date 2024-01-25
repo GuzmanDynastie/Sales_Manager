@@ -24,12 +24,16 @@ public class CTRL_Product implements ActionListener {
     Interfaz interfaz = new Interfaz();
     CustomHeaderRenderer customHeader;
 
+
     public CTRL_Product(Interfaz interfaz) throws SQLException {
 
         this.dao = new Query_Product();
         this.interfaz = interfaz;
+        
         this.interfaz.buttonRestoreProduct.addActionListener(this);
         this.interfaz.buttonReturnTable.addActionListener(this);
+        this.interfaz.buttonAddProduct.addActionListener(this);
+        this.interfaz.buttonSaveDetailsProduct.addActionListener(this);
 
         this.interfaz.addWindowListener(new WindowAdapter() {
             @Override
@@ -40,8 +44,7 @@ public class CTRL_Product implements ActionListener {
 
         interfaz.buttonReturnTable.setVisible(false);
 
-        customHeader = new CustomHeaderRenderer(interfaz.tableExistingsProducts.getTableHeader());
-        showListProducts(interfaz.tableExistingsProducts, "existingProducts");
+        updateInterfaz();
     }
 
     private Product[] readProdructs() throws SQLException {
@@ -150,6 +153,37 @@ public class CTRL_Product implements ActionListener {
         }
     }
 
+    private boolean insertProduct(String name, String type, int idPresentation, double price) throws SQLException {
+        Product product = new Product(name, type, idPresentation, price);
+        return dao.insertProduct(product);
+    }
+
+    private void addProduct() {
+        String name = interfaz.textfieldNameProduct.getText();
+        String type = interfaz.textfieldTypeProduct.getText();
+        try {
+            if (interfaz.comboboxPresentationProduct.getSelectedIndex() == 0 || name.isBlank() || type.isBlank() || interfaz.textfieldPriceProduct.getText().isBlank()) {
+                utility.Messages.showErrorMessage("Existen campos vacios");
+            } else {
+                Double price = Double.valueOf(interfaz.textfieldPriceProduct.getText());
+                int presentation = interfaz.comboboxPresentationProduct.getSelectedIndex();
+                insertProduct(name, type, presentation, price);
+                utility.Messages.showCorrectMessage("El producto se ha registrado exitosamente");
+                cleanData();
+                updateInterfaz();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CTRL_Presentation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void cleanData() {
+        interfaz.textfieldNameProduct.setText("");
+        interfaz.textfieldTypeProduct.setText("");
+        interfaz.textfieldPriceProduct.setText("");
+        interfaz.comboboxPresentationProduct.setSelectedIndex(0);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == interfaz.buttonRestoreProduct) {
@@ -158,9 +192,14 @@ public class CTRL_Product implements ActionListener {
         if (e.getSource() == interfaz.buttonReturnTable) {
             showExistingProducts();
         }
-        if (e.getSource() == interfaz.buttonSaveDetailsProduct) {
-            System.out.println("hola mundo");
+        if (e.getSource() == interfaz.buttonAddProduct) {
+            addProduct();
         }
+    }
+
+    private void updateInterfaz() throws SQLException {
+        customHeader = new CustomHeaderRenderer(interfaz.tableExistingsProducts.getTableHeader());
+        showListProducts(interfaz.tableExistingsProducts, "existingProducts");
     }
 
 }

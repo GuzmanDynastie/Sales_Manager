@@ -11,6 +11,13 @@ public class Product extends Presentation {
     public Product() {
     }
 
+    public Product(String name, String type, int idPresentation, double price) {
+        this.name = name;
+        this.type = type;
+        this.idPresentation = idPresentation;
+        this.price = price;
+    }
+
     public Product(int idProduct, String name, String type, int idPresentation, double price) {
         this.idProduct = idProduct;
         this.name = name;

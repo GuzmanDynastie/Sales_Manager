@@ -9,17 +9,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Presentation;
 import query.Query_Presentation;
+import utility.CustomHeaderRenderer;
 import view.Interfaz;
 
 public class CTRL_Presentation implements ActionListener {
 
     Query_Presentation dao;
     Interfaz interfaz = new Interfaz();
+    CustomHeaderRenderer customHeader;
+    
 
     public CTRL_Presentation(Interfaz interfaz) throws SQLException {
 
         this.dao = new Query_Presentation();
         this.interfaz = interfaz;
+        
         this.interfaz.buttonSaveDetailsProduct.addActionListener(this);
 
         this.interfaz.buttonGroup.add(interfaz.radioButtonKg);
