@@ -30,6 +30,7 @@ public class CTRL_Product implements ActionListener {
         this.dao = new Query_Product();
         this.interfaz = interfaz;
         
+        
         this.interfaz.buttonRestoreProduct.addActionListener(this);
         this.interfaz.buttonReturnTable.addActionListener(this);
         this.interfaz.buttonAddProduct.addActionListener(this);

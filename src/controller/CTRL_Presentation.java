@@ -17,13 +17,13 @@ public class CTRL_Presentation implements ActionListener {
     Query_Presentation dao;
     Interfaz interfaz = new Interfaz();
     CustomHeaderRenderer customHeader;
-    
 
     public CTRL_Presentation(Interfaz interfaz) throws SQLException {
 
         this.dao = new Query_Presentation();
         this.interfaz = interfaz;
         
+
         this.interfaz.buttonSaveDetailsProduct.addActionListener(this);
 
         this.interfaz.buttonGroup.add(interfaz.radioButtonKg);
@@ -58,6 +58,7 @@ public class CTRL_Presentation implements ActionListener {
                 insertPresentation(presentation, concateVolumeSelection);
                 utility.Messages.showCorrectMessage("La presentacion " + presentation + " " + concateVolumeSelection + " se ha registrado exitosamente");
                 cleanData();
+                addPresentationCombobox();
             }
         } catch (SQLException ex) {
             Logger.getLogger(CTRL_Presentation.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,6 +70,7 @@ public class CTRL_Presentation implements ActionListener {
     }
 
     private void addPresentationCombobox() throws SQLException {
+        interfaz.comboboxPresentationProduct.removeAllItems();
         interfaz.comboboxPresentationProduct.addItem("Selecciona una opcion");
         for (Presentation presentation : getPresentations()) {
             interfaz.comboboxPresentationProduct.addItem(presentation.getPresentation() + " " + presentation.getVolume());

@@ -12,9 +12,9 @@ public abstract class DAO {
     final protected static String DRIVER = "com.mysql.cj.jdbc.Driver";
     final protected static String SERVER = "localhost"; //127.0.0.1
     final protected static int PORT = 3306;
-    final protected static String NAME_DB = "";
+    final protected static String NAME_DB = "NegocioCarniceria";
     final protected static String USER = "root";
-    final protected static String PASSWORD = "";
+    final protected static String PASSWORD = "GuzmanJR7";
 
     private Connection connection;
     private Statement stmt;
