@@ -80,6 +80,19 @@ public class Query_Product extends DAO {
         }
         return rowsAffected;
     }
+    
+    public int deleteProduct(int product) throws SQLException {
+        PreparedStatement prep = null;
+        int rowsAffected = -1;
+        try {
+            prep = prepareStatement(DELETE);
+            prep.setInt(1, product);
+            rowsAffected = prep.executeUpdate();
+        } finally {
+            closeResource(prep);
+        }
+        return rowsAffected;
+    }
 
     public Product[] readEliminatedProducts() throws SQLException {
         ArrayList<Product> list = new ArrayList<>();

@@ -29,12 +29,13 @@ public class CTRL_Product implements ActionListener {
 
         this.dao = new Query_Product();
         this.interfaz = interfaz;
-        
+
         
         this.interfaz.buttonRestoreProduct.addActionListener(this);
         this.interfaz.buttonReturnTable.addActionListener(this);
         this.interfaz.buttonAddProduct.addActionListener(this);
         this.interfaz.buttonSaveDetailsProduct.addActionListener(this);
+        this.interfaz.buttonDeleteProduct.addActionListener(this);
 
         this.interfaz.addWindowListener(new WindowAdapter() {
             @Override
@@ -159,6 +160,32 @@ public class CTRL_Product implements ActionListener {
         return dao.insertProduct(product);
     }
 
+    private int deleteProduct(int product) throws SQLException {
+        return dao.deleteProduct(product);
+    }
+
+    private int getSelectedProductId() {
+        int selectedRow = interfaz.tableExistingsProducts.getSelectedRow();
+
+        if (selectedRow != -1) {
+            int idProduct = Integer.parseInt(String.valueOf(interfaz.tableExistingsProducts.getValueAt(selectedRow, 0)));
+            return idProduct;
+        } else {
+            return -1;
+        }
+    }
+
+    private void deleteProduct2() throws SQLException {
+        int selectedProductId = getSelectedProductId();
+
+        if (selectedProductId != -1) {
+            deleteProduct(selectedProductId);
+            updateInterfaz();
+        } else {
+            utility.Messages.showErrorMessage("No ha seleccionado ningun producto");
+        }
+    }
+
     private void addProduct() {
         String name = interfaz.textfieldNameProduct.getText();
         String type = interfaz.textfieldTypeProduct.getText();
@@ -195,6 +222,13 @@ public class CTRL_Product implements ActionListener {
         }
         if (e.getSource() == interfaz.buttonAddProduct) {
             addProduct();
+        }
+        if (e.getSource() == interfaz.buttonDeleteProduct) {
+            try {
+                deleteProduct2();
+            } catch (SQLException ex) {
+                Logger.getLogger(CTRL_Product.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
