@@ -24,13 +24,11 @@ public class CTRL_Product implements ActionListener {
     Interfaz interfaz = new Interfaz();
     CustomHeaderRenderer customHeader;
 
-
     public CTRL_Product(Interfaz interfaz) throws SQLException {
 
         this.dao = new Query_Product();
         this.interfaz = interfaz;
 
-        
         this.interfaz.buttonRestoreProduct.addActionListener(this);
         this.interfaz.buttonReturnTable.addActionListener(this);
         this.interfaz.buttonAddProduct.addActionListener(this);
@@ -164,6 +162,10 @@ public class CTRL_Product implements ActionListener {
         return dao.deleteProduct(product);
     }
 
+    private int updateDeleteProduct(int product) throws SQLException {
+        return dao.updateDeleteProduct(product);
+    }
+
     private int getSelectedProductId() {
         int selectedRow = interfaz.tableExistingsProducts.getSelectedRow();
 
@@ -172,6 +174,19 @@ public class CTRL_Product implements ActionListener {
             return idProduct;
         } else {
             return -1;
+        }
+    }
+
+    private void updateDeleteProduct2() throws SQLException {
+        int selectedProductId = getSelectedProductId();
+
+        if (interfaz.buttonReturnTable.isVisible() == true) {
+            if (selectedProductId != -1) {
+                updateDeleteProduct(selectedProductId);
+                updateDeleteInterfaz();
+            } else {
+                utility.Messages.showErrorMessage("No ha seleccionado ningun producto");
+            }
         }
     }
 
@@ -221,7 +236,15 @@ public class CTRL_Product implements ActionListener {
             showExistingProducts();
         }
         if (e.getSource() == interfaz.buttonAddProduct) {
-            addProduct();
+            if (interfaz.buttonReturnTable.isVisible() == true) {
+                try {
+                    updateDeleteProduct2();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CTRL_Product.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                addProduct();
+            }
         }
         if (e.getSource() == interfaz.buttonDeleteProduct) {
             try {
@@ -235,6 +258,11 @@ public class CTRL_Product implements ActionListener {
     private void updateInterfaz() throws SQLException {
         customHeader = new CustomHeaderRenderer(interfaz.tableExistingsProducts.getTableHeader());
         showListProducts(interfaz.tableExistingsProducts, "existingProducts");
+    }
+    
+    private void updateDeleteInterfaz() throws SQLException {
+        customHeader = new CustomHeaderRenderer(interfaz.tableExistingsProducts.getTableHeader());
+        showListProducts(interfaz.tableExistingsProducts, "eliminatedProducts");
     }
 
 }

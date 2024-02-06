@@ -29,7 +29,7 @@ public class Query_Product extends DAO {
             + "FROM " + NAME_DB + "." + TABLE + " JOIN " + NAME_DB + "." + TABLE2 + " ON " + NAME_DB + "." + TABLE + ".ID_Presentacion = " + NAME_DB + "." + TABLE2 + ".ID_Presentacion "
             + "WHERE " + NAME_DB + "." + TABLE + ".Activo = 0;";
     ;
-    private static final String UPDATE_DELETE = "UPDATE " + TABLE + "SET Activo = 1 WHERE ID_Producto = ?";
+    private static final String UPDATE_DELETE = "UPDATE " + TABLE + " SET Activo = 1 WHERE ID_Producto = ?";
 
     public static final String[] FIELDS_TABLE = {"ID", "NOMBRE", "TIPO", "PRECIO c/u", "PRESENTACÓN", "VOLUMEN"};
 
@@ -86,6 +86,19 @@ public class Query_Product extends DAO {
         int rowsAffected = -1;
         try {
             prep = prepareStatement(DELETE);
+            prep.setInt(1, product);
+            rowsAffected = prep.executeUpdate();
+        } finally {
+            closeResource(prep);
+        }
+        return rowsAffected;
+    }
+    
+    public int updateDeleteProduct(int product) throws SQLException{
+        PreparedStatement prep = null;
+        int rowsAffected = -1;
+        try{
+            prep = prepareStatement(UPDATE_DELETE);
             prep.setInt(1, product);
             rowsAffected = prep.executeUpdate();
         } finally {
